@@ -53,7 +53,7 @@ const Navbar = () => {
                 )}
             </div>
         </div>
-        <div className={`${menu?'translate-x-0':"-translate-x-full"} lg:hidden flex flex-col absolute bg-backgroundcolor text-white left-0 top-16 font-semibold text-2xl text-center pt-8 pb-4 gap-8 w-full h-fit transition-transform duration-300`}>
+        <div className={`${menu?'translate-x-0':"-translate-x-full"} lg:hidden flex flex-col absolute  bg-backgroundColor text-white left-0 top-16 font-semibold text-2xl text-center pt-8 pb-4 gap-8 w-full h-fit transition-transform duration-300`}>
             <Link to='home' spy={true} smooth={true} duration={500} className='hover:text-yellow-300 transition-all cursor-pointer'>Home</Link>
                 <Link onClick={closemenu} to='services' spy={true} smooth={true} duration={500} className='hover:text-yellow-300 text-lg transition-all cursor-pointer'>Services</Link>
                 <Link onClick={closemenu} to='about' spy={true} smooth={true} duration={500} className='hover:text-yellow-300 text-lg transition-all cursor-pointer'>About</Link>
