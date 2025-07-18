@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../layouts/Button";
+import { Link } from "react-scroll";
 
 const Home = () => {
   return (
@@ -10,14 +11,14 @@ const Home = () => {
         <h1 className="text-5xl font-bold leading-tight">
           Empowering Health Choices for a Vibrant Life Your Trusted
         </h1>
-        <p>
+        <p className="pb-10 ">
           Medical Cure include a wide range of healthcare activities
           provided by professionals to diagnose, treat, and prevent illnesses.
           These services can be delivered in hospitals, clinics, or through home
           care, and may involve consultations, surgeries, emergency care, and
           specialized treatments.
         </p>
-        <Button title={"See Services"} />
+       <Link  to='services' spy={true} smooth={true} duration={500}> <Button title={"See Services"} /></Link>
       </div>
     </div>
   );

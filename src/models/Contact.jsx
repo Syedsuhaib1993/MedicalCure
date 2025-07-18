@@ -1,50 +1,168 @@
-import React from 'react'
-import Button from '../layouts/Button'
+import React, { useState } from 'react';
+import Button from '../layouts/Button';
 
-const Contact = ({closeForm}) => {
+// Example doctors data
+const data = [
+  {
+    img: 'doc1',
+    name: 'Dr. Serena Mitchell',
+    specialties: 'Orthopedic Surgeon',
+  },
+  {
+    img: 'doc2',
+    name: 'Dr. Julian Bennett',
+    specialties: 'Cardiologist',
+  },
+  {
+    img: 'doc3',
+    name: 'Dr. Camila Rodriguez',
+    specialties: 'Pediatrician',
+  },
+  {
+    img: 'doc4',
+    name: 'Dr. Victor Nguyen',
+    specialties: 'Neurologist',
+  },
+  {
+    img: 'doc5',
+    name: 'Dr. Ethan Carter',
+    specialties: 'Dermatologist',
+  },
+  {
+    img: 'doc6',
+    name: 'Dr. Olivia Martinez',
+    specialties: 'Ophthalmologist',
+  },
+];
+
+// Example diseases list
+const diseases = [
+  "Diabetes",
+  "Hypertension",
+  "Asthma",
+  "Heart Disease",
+  "Arthritis",
+  "Allergies",
+  "Migraine",
+  "Depression",
+];
+
+const Contact = ({ closeForm }) => {
+  const [selectedDoctor, setSelectedDoctor] = useState('');
+  const [selectedSpecialty, setSelectedSpecialty] = useState('');
+  const [selectedDisease, setSelectedDisease] = useState('');
+
+  const handleDoctorChange = (e) => {
+    const doctorName = e.target.value;
+    setSelectedDoctor(doctorName);
+
+    const doctor = data.find(doc => doc.name === doctorName);
+    if (doctor) {
+      setSelectedSpecialty(doctor.specialties);
+    } else {
+      setSelectedSpecialty('');
+    }
+  };
+
   return (
-    <div className='fixed inset-0 flex items-center z-10 justify-center bg-black bg-opacity-50'>
-        <div className='popup-form absolute mt-12 text-black '>
-            <form className='w-80 md:w-96 space-y-5  p-5 rounded-xl bg-backgroundColor '>
-                <h1 className='text-4xl font-semibold text-center'>Book Now</h1>
-                <div className='flex flex-col'>
-                    <input type="text"
-                    name='FirstName' 
-                    id="FirstName"
-                    placeholder='First name'
-                    className='py-3 px-2  rounded-lg opacity-80 focus:outline-none' />
-                </div>
-                <div className='flex flex-col '>
-                    <input type="text"
-                    name='LastName' 
-                    id="LastName"
-                    placeholder='Last name'
-                    className='py-3 px-2 bg-backgroundcolor rounded-lg opacity-80 focus:outline-none' />
-                </div>
-                <div className='flex flex-col'>
-                    <input type="email"
-                    name='email' 
-                    id="email"
-                    placeholder='Your email'
-                    className='py-3 px-2 bg-backgroundcolor rounded-lg opacity-80 focus:outline-none' />
-                </div>
-                <div className='flex flex-col'>
-                    <input type="text"
-                    name='phonenumber' 
-                    id="phonenumber"
-                    placeholder='Your Number.'
-                    className='py-3 px-2 bg-backgroundcolor rounded-lg opacity-80 focus:outline-none' />
-                </div>
-                <div className='flex gap-5 justify-around text-lg'>
-                    <Button title='Book Appointment'/>
-                    <button className='bg-white sm:text-lg text-sm text-black px-8 rounded-lg active:bg-red-500' onClick={closeForm}>
-                        Close
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-  )
-}
+    <div className='fixed inset-0 flex items-center z-10 justify-center bg-black bg-opacity-50 px-4'>
+      <div className='popup-form absolute mt-8 text-black'>
+        <form className='w-full max-w-lg md:max-w-xl space-y-4 p-8 rounded-2xl bg-backgroundColor shadow-lg'>
+          <h1 className='text-3xl font-bold text-center mb-4'>Book Appointment</h1>
 
-export default Contact
+          <div className='flex flex-col'>
+            <label htmlFor='FirstName' className='mb-1 font-medium'>First Name</label>
+            <input
+              type="text"
+              name='FirstName'
+              id="FirstName"
+              placeholder='Enter your first name'
+              className='py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary w-full'
+            />
+          </div>
+
+
+          <div className='flex flex-col'>
+            <label htmlFor='email' className='mb-1 font-medium'>Email</label>
+            <input
+              type="email"
+              name='email'
+              id="email"
+              placeholder='you@example.com'
+              className='py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary w-full'
+            />
+          </div>
+
+          <div className='flex flex-col'>
+            <label htmlFor='phonenumber' className='mb-1 font-medium'>Phone Number</label>
+            <input
+              type="text"
+              name='phonenumber'
+              id="phonenumber"
+              placeholder='e.g., +1 234 567 890'
+              className='py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary w-full'
+            />
+          </div>
+
+          <div className='flex flex-col'>
+            <label htmlFor='commonDisease' className='mb-1 font-medium'>Common Disease</label>
+            <select
+              name='commonDisease'
+              id='commonDisease'
+              value={selectedDisease}
+              onChange={(e) => setSelectedDisease(e.target.value)}
+              className='py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary w-full'
+            >
+              <option value="" disabled>Select a disease</option>
+              {diseases.map((disease, idx) => (
+                <option key={idx} value={disease}>{disease}</option>
+              ))}
+            </select>
+          </div>
+          <div className='flex flex-col'>
+            <label htmlFor='doctor' className='mb-1 font-medium'>Select Doctor</label>
+            <select
+              name="doctor"
+              id="doctor"
+              value={selectedDoctor}
+              onChange={handleDoctorChange}
+              className='py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary w-full'
+            >
+              <option value="" disabled>Select a doctor</option>
+              {data.map((doc, idx) => (
+                <option key={idx} value={doc.name}>{doc.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {selectedSpecialty && (
+            <div className='flex flex-col'>
+              <label htmlFor='specialties' className='mb-1 font-medium'>Specialty</label>
+              <input
+                type="text"
+                name="specialties"
+                id="specialties"
+                value={selectedSpecialty}
+                readOnly
+                className='py-3 px-4 rounded-lg border border-gray-300 bg-gray-100 w-full cursor-not-allowed'
+              />
+            </div>
+          )}
+
+          <div className='flex gap-5 justify-between pt-4'>
+            <Button title='Book Appointment' />
+            <button
+              type="button"
+              className='bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition'
+              onClick={closeForm}
+            >
+              Close
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default Contact;
