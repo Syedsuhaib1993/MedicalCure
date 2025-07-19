@@ -1,6 +1,7 @@
+import axios from "axios";
 import React, { useState } from "react";
 
-export default function AdminLogin() {
+export default function AdminLogin({setToast}) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -10,10 +11,23 @@ export default function AdminLogin() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
     console.log("Admin login data:", formData);
     // Add your admin login logic here (API call, validation, etc.)
+    try {
+      const response = await axios.post("http://localhost:8080/api/login",{
+        email: formData.email,
+        password: formData.password,
+      })
+      console.log(response.data);
+      
+    } catch (error) {
+        setToast({ message: "Login failed", type: "error" })
+      setTimeout(() => {
+         setToast({ message: "", type: "" })
+      }, 2000);
+    }
   };
 
   return (

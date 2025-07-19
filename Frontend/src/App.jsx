@@ -38,7 +38,7 @@ const App = () => {
         )}
       </AnimatePresence>
       <Routes>
-        <Route path="/adminlogin" element={<AdminLogin/>} />
+        <Route path="/adminlogin" element={<AdminLogin setToast={setToast}/>} />
         <Route path="/" element={<Select/>}/>
         <Route path="/doctorslogin" element={<DoctorsLogin/>}/>
         <Route path="*" element={<NotFound/>} />
