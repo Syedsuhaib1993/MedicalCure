@@ -15,8 +15,11 @@ const App = () => {
   return (
     <div>
       <Routes>
+        <Route path="/admin" element={<Admin/>} />
+        <Route path="/" element={<Select/>}/>
+        <Route path="/doctorpanel" element={<DoctorPanel/>}/>
         <Route
-          path="/"
+          path="/patient"
           element={
             <>
               <Navbar />
@@ -29,9 +32,6 @@ const App = () => {
             </>
           }
         />
-        <Route path="/admin" element={<Admin/>} />
-        <Route path="/select" element={<Select/>}/>
-        <Route path="/doctorpanel" element={<DoctorPanel/>}/>
       </Routes>
     </div>
   );

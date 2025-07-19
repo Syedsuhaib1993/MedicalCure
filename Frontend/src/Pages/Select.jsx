@@ -21,7 +21,7 @@ export default function Select() {
     {
       title: "Patient",
       icon: <FaUser className="text-6xl text-white" />,
-      route: "/",
+      route: "/patient",
       bg: "bg-gradient-to-r from-pink-500 to-rose-600",
     },
   ];
