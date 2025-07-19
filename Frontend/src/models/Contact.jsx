@@ -48,7 +48,7 @@ const diseases = [
   "Depression",
 ];
 
-const Contact = ({ closeForm }) => {
+const Contact = ({ closeForm ,setToast}) => {
   const [selectedDoctor, setSelectedDoctor] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
   const [selectedDisease, setSelectedDisease] = useState('');
@@ -81,9 +81,17 @@ const Contact = ({ closeForm }) => {
       })
       alert('Appointment Form Submitted')
       console.log(response.data);
+      setToast({ message: "Form Submitted Successfull", type: "success" })
+      setTimeout(() => {
+         setToast({ message: "", type: "" })
+      }, 2000);
       
     } catch (error) {
       console.log(error.message);
+      setToast({ message: "Form Submitted failed", type: "error" })
+      setTimeout(() => {
+         setToast({ message: "", type: "" })
+      }, 2000);
       
     }
     

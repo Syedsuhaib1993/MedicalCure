@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function Admin() {
+export default function AdminLogin() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",

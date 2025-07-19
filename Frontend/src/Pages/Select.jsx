@@ -9,13 +9,13 @@ export default function Select() {
     {
       title: "Admin",
       icon: <FaUserShield className="text-6xl text-white" />,
-      route: "/admin",
+      route: "/adminlogin",
       bg: "bg-gradient-to-r from-indigo-500 to-purple-600",
     },
     {
       title: "Doctor",
       icon: <FaUserMd className="text-6xl text-white" />,
-      route: "/doctorpanel",
+      route: "/doctorslogin",
       bg: "bg-gradient-to-r from-green-400 to-teal-500",
     },
     {

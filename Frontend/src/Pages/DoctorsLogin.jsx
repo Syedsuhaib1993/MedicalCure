@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function DoctorPanel() {
+export default function DoctorsLogin() {
   const [formData, setFormData] = useState({
     doctorName: "",
     email: "",

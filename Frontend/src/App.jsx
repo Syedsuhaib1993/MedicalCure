@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import About from "./components/About";
@@ -7,22 +7,53 @@ import Doctors from "./components/Doctors";
 import Blog from "./components/Blog";
 import Footer from "./components/Footer";
 import { Route, Routes } from "react-router-dom";
-import Admin from "./Pages/Admin";
 import Select from "./Pages/Select";
-import DoctorPanel from "./Pages/DoctorPanel";
-
+import AdminLogin from "./Pages/AdminLogin";
+import DoctorsLogin from "./Pages/DoctorsLogin";
+import NotFound from "./Pages/NotFound";
+import {AnimatePresence, motion} from 'framer-motion'
+import Dashboard from "./Pages/AdminDashboard/Dashboard";
+import AddPost from "./Pages/AdminDashboard/AddPost";
+import Forms from "./Pages/AdminDashboard/Forms";
+import Tables from "./Pages/AdminDashboard/Tables";
+import Profile from "./Pages/AdminDashboard/Profile";
 const App = () => {
+  const [toast, setToast] = useState({ message: "", type: "" });
   return (
     <div>
+       {/* ✅ Inline Toast using framer-motion */}
+      <AnimatePresence>
+        {toast.message && (
+          <motion.div
+            key="toast"
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -50, opacity: 0 }}
+            className={`fixed bottom-6 right-6 z-50 px-6 py-4 rounded shadow-lg text-white font-semibold
+              ${toast.type === "success" ? "bg-green-600" : "bg-red-600"}
+            `}
+          >
+            {toast.message}
+          </motion.div>
+        )}
+      </AnimatePresence>
       <Routes>
-        <Route path="/admin" element={<Admin/>} />
+        <Route path="/adminlogin" element={<AdminLogin/>} />
         <Route path="/" element={<Select/>}/>
-        <Route path="/doctorpanel" element={<DoctorPanel/>}/>
+        <Route path="/doctorslogin" element={<DoctorsLogin/>}/>
+        <Route path="*" element={<NotFound/>} />
+
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/add-post" element={<AddPost />} />
+        <Route path="/forms" element={<Forms />} />
+        <Route path="/tables" element={<Tables />} />
+        <Route path="/profile" element={<Profile />} />
+
         <Route
           path="/patient"
           element={
             <>
-              <Navbar />
+              <Navbar setToast={setToast} />
               <Home />
               <Services />
               <About />

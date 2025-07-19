@@ -3,7 +3,7 @@ import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai'
 import { Link } from 'react-scroll'
 import Contact from '../models/Contact'
 
-const Navbar = () => {
+const Navbar = ({setToast}) => {
     const [menu,setMenu]=useState(false)
     const [showForm,setShowForm] = useState(false)
 
@@ -44,7 +44,7 @@ const Navbar = () => {
                     Book Now
                 </button>
             </div>
-                {showForm && <Contact closeForm={closeForm}/>}            
+                {showForm && <Contact setToast={setToast} closeForm={closeForm}/>}            
             <div className='lg:hidden  flex'>
                 {menu?(
                     <AiOutlineClose size={28} onClick={handleChange}/>
