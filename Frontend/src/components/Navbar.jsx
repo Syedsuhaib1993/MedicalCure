@@ -41,7 +41,7 @@ const Navbar = () => {
             <div className='hidden lg:flex'>
                 <button onClick={openForm} 
                 className='bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-300 trasition duration-300 ease-in-out'>
-                    Contact us
+                    Book Now
                 </button>
             </div>
                 {showForm && <Contact closeForm={closeForm}/>}            
@@ -62,7 +62,7 @@ const Navbar = () => {
                 <div className='lg:hidden '>
                 <button onClick={openForm}
                 className='bg-yellow-500 text-lg text-white px-4 py-2 rounded-md hover:bg-yellow-300 trasition duration-300 ease-in-out'>
-                   Book an Appointment
+                   Book Now
                 </button>
             </div>
         </div>

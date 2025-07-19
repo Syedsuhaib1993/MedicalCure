@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../layouts/Button';
+import axios from 'axios';
 
 // Example doctors data
 const data = [
@@ -51,6 +52,9 @@ const Contact = ({ closeForm }) => {
   const [selectedDoctor, setSelectedDoctor] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
   const [selectedDisease, setSelectedDisease] = useState('');
+  const [name,setName] = useState('')
+  const [email,setEmail] = useState('')
+  const [number,setNumber] = useState('')
 
   const handleDoctorChange = (e) => {
     const doctorName = e.target.value;
@@ -63,11 +67,38 @@ const Contact = ({ closeForm }) => {
       setSelectedSpecialty('');
     }
   };
-
+  const handleSubmit=async(e)=>{
+    e.preventDefault()
+    // console.log(name,email,number,selectedDisease,selectedDoctor,selectedSpecialty);
+    try {
+      const response = await axios.post('http://localhost:8080/api/create',{
+        name:name,
+        email:email,
+        number:number,
+        disease:selectedDisease,
+        doctor:selectedDoctor,
+        specialty:selectedSpecialty
+      })
+      alert('Appointment Form Submitted')
+      console.log(response.data);
+      
+    } catch (error) {
+      console.log(error.message);
+      
+    }
+    
+    
+    setSelectedDisease('')
+    setSelectedDoctor('')
+    setSelectedSpecialty('')
+    setName('')
+    setEmail('')
+    setNumber('')
+  }
   return (
     <div className='fixed inset-0 flex items-center z-10 justify-center bg-black bg-opacity-50 px-4'>
       <div className='popup-form absolute mt-8 text-black'>
-        <form className='w-full max-w-lg md:max-w-xl space-y-4 p-8 rounded-2xl bg-backgroundColor shadow-lg'>
+        <form onSubmit={handleSubmit} className='w-full max-w-lg md:max-w-xl space-y-4 p-8 rounded-2xl bg-backgroundColor shadow-lg'>
           <h1 className='text-3xl font-bold text-center mb-4'>Book Appointment</h1>
 
           <div className='flex flex-col'>
@@ -77,6 +108,8 @@ const Contact = ({ closeForm }) => {
               name='FirstName'
               id="FirstName"
               placeholder='Enter your first name'
+              value={name}
+              onChange={(e)=>setName(e.target.value)}
               className='py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary w-full'
             />
           </div>
@@ -89,6 +122,8 @@ const Contact = ({ closeForm }) => {
               name='email'
               id="email"
               placeholder='you@example.com'
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
               className='py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary w-full'
             />
           </div>
@@ -100,6 +135,8 @@ const Contact = ({ closeForm }) => {
               name='phonenumber'
               id="phonenumber"
               placeholder='e.g., +1 234 567 890'
+              value={number}
+              onChange={(e)=>setNumber(e.target.value)}
               className='py-3 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary w-full'
             />
           </div>
@@ -150,7 +187,7 @@ const Contact = ({ closeForm }) => {
           )}
 
           <div className='flex gap-5 justify-between pt-4'>
-            <Button title='Book Appointment' />
+            <Button title='Book Appointment' submit="submit" />
             <button
               type="button"
               className='bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition'
