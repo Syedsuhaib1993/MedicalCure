@@ -4,6 +4,7 @@ import dotenv  from 'dotenv';
 import ConnectDB from './src/config/db.js';
 import PatientRoutes from './src/routes/patient.routes.js';
 import StaffRoutes from './src/routes/staff.routes.js';
+import ImageRouter from './src/routes/image.routes.js';
 
 const app =express()
 dotenv.config()
@@ -17,6 +18,9 @@ app.use('/api',PatientRoutes)
 
 // STAFFROUTES
 app.use('/api',StaffRoutes)
+
+// IMAGErOUTES
+app.use('/api',ImageRouter)
 
 app.listen(port,()=>{
     console.log(`server is running on port ${port}`)

@@ -1,7 +1,9 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminLogin({setToast}) {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -20,8 +22,19 @@ export default function AdminLogin({setToast}) {
         email: formData.email,
         password: formData.password,
       })
-      console.log(response.data);
-      
+      console.log(response.data.staff.role);
+      localStorage.setItem('user',response.data.staff.role)
+      if(response.data.staff.role === "Admin"){
+        setToast({ message: "Login Successfull", type: "success" })
+      setTimeout(() => {
+         setToast({ message: "", type: "" })
+      }, 2000);
+      setTimeout(() => {
+         navigate('/dashboard')
+      }, 2000);
+
+      }
+
     } catch (error) {
         setToast({ message: "Login failed", type: "error" })
       setTimeout(() => {

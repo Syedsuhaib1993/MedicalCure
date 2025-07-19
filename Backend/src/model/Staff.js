@@ -10,7 +10,8 @@ const staffSchema = new Schema({
         type:String,
         default:"Doctor"
     },
-    specialty:String
+    specialty:String,
+    image:String
 })
 
 

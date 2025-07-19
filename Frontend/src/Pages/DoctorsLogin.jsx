@@ -1,6 +1,9 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function DoctorsLogin() {
+export default function DoctorsLogin({setToast}) {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     doctorName: "",
     email: "",
@@ -11,10 +14,35 @@ export default function DoctorsLogin() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
     // You can add your login logic here (e.g., API call)
+    try {
+          const response = await axios.post("http://localhost:8080/api/login",{
+            email: formData.email,
+            password: formData.password,
+            doctor:formData.doctorName
+          })
+          console.log(response.data.staff.role);
+          localStorage.setItem('user',response.data.staff.role)
+          if(response.data.staff.role === "Doctor"){
+            setToast({ message: "Login Successfull", type: "success" })
+          setTimeout(() => {
+             setToast({ message: "", type: "" })
+          }, 2000);
+          setTimeout(() => {
+             navigate('/doctorDashboard')
+          }, 2000);
+    
+          }
+    
+        } catch (error) {
+            setToast({ message: "Login failed", type: "error" })
+          setTimeout(() => {
+             setToast({ message: "", type: "" })
+          }, 2000);
+        }
   };
 
   return (

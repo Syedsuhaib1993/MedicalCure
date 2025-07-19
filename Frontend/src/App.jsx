@@ -17,6 +17,10 @@ import AddPost from "./Pages/AdminDashboard/AddPost";
 import Forms from "./Pages/AdminDashboard/Forms";
 import Tables from "./Pages/AdminDashboard/Tables";
 import Profile from "./Pages/AdminDashboard/Profile";
+import DoctorDashboard from "./Pages/DoctorDashboard/DoctorDashboard";
+import AdminRoutes from "./routes/adminRoutes";
+import DoctorRoutes from "./routes/DoctorRoutes";
+import DoctorsList from "./Pages/AdminDashboard/DoctorsList";
 const App = () => {
   const [toast, setToast] = useState({ message: "", type: "" });
   return (
@@ -40,14 +44,19 @@ const App = () => {
       <Routes>
         <Route path="/adminlogin" element={<AdminLogin setToast={setToast}/>} />
         <Route path="/" element={<Select/>}/>
-        <Route path="/doctorslogin" element={<DoctorsLogin/>}/>
+        <Route path="/doctorslogin" element={<DoctorsLogin setToast={setToast}/>}/>
         <Route path="*" element={<NotFound/>} />
-
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/add-post" element={<AddPost />} />
-        <Route path="/forms" element={<Forms />} />
-        <Route path="/tables" element={<Tables />} />
-        <Route path="/profile" element={<Profile />} />
+          <Route element={<AdminRoutes/>}>
+        <Route path="/dashboard" element={<Dashboard setToast={setToast} />} />
+        <Route path="/add-post" element={<AddPost setToast={setToast} />} />
+        <Route path="/forms" element={<Forms setToast={setToast} />} />
+        <Route path="/tables" element={<Tables setToast={setToast} />} />
+        <Route path="/profile" element={<Profile setToast={setToast} />} />
+        <Route path="/doctorlist" element={<DoctorsList setToast={setToast} />} />
+        </Route>
+        <Route element={<DoctorRoutes/>}>
+        <Route path="/doctorDashboard" element={<DoctorDashboard />} />
+        </Route>
 
         <Route
           path="/patient"

@@ -4,18 +4,19 @@ import { FaUserShield, FaUserMd, FaUser } from "react-icons/fa";
 
 export default function Select() {
   const navigate = useNavigate();
+  const user = localStorage.getItem('user')
 
   const cards = [
     {
       title: "Admin",
       icon: <FaUserShield className="text-6xl text-white" />,
-      route: "/adminlogin",
+      route: user == "Admin"?"/dashboard":"/adminlogin",
       bg: "bg-gradient-to-r from-indigo-500 to-purple-600",
     },
     {
       title: "Doctor",
       icon: <FaUserMd className="text-6xl text-white" />,
-      route: "/doctorslogin",
+      route: user == "Doctor"?"/doctorDashboard":"/doctorslogin",
       bg: "bg-gradient-to-r from-green-400 to-teal-500",
     },
     {

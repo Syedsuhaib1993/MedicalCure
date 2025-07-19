@@ -7,16 +7,17 @@ import {
   AiOutlineTable,
   AiOutlineUser,
 } from "react-icons/ai";
-import { MdOutlineArticle } from "react-icons/md";
+import { FaUserMd } from "react-icons/fa";
 
 export default function Sidebar() {
   const location = useLocation();
 
   const links = [
-    { to: "/profile", label: "User Profile", icon: <AiOutlineUser /> },
+    { to: "/profile", label: "Admin Profile", icon: <AiOutlineUser /> },
+    { to: "/doctorlist", label: "Doctors List", icon: <FaUserMd /> },
     { to: "/dashboard", label: "Dashboard", icon: <AiFillDashboard /> },
-    { to: "/add-post", label: "Add New Post", icon: <AiFillEdit /> },
-    { to: "/forms", label: "Forms & Components", icon: <AiOutlineForm /> },
+    { to: "/add-post", label: "Add Doctor", icon: <AiFillEdit /> },
+    { to: "/forms", label: "Patients Forms", icon: <AiOutlineForm /> },
     { to: "/tables", label: "Tables", icon: <AiOutlineTable /> },
   ];
 

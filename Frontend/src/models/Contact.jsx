@@ -79,7 +79,6 @@ const Contact = ({ closeForm ,setToast}) => {
         doctor:selectedDoctor,
         specialty:selectedSpecialty
       })
-      alert('Appointment Form Submitted')
       console.log(response.data);
       setToast({ message: "Form Submitted Successfull", type: "success" })
       setTimeout(() => {

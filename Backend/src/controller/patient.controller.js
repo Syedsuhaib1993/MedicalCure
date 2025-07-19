@@ -13,3 +13,12 @@ export const CreatePatient = async(req,res)=>{
         return res.status(500).json({message: error.message})
     }
 }
+
+export const GetPatient = async(req,res)=>{
+    try {
+        const patient = await Patient.find();
+        return res.status(200).json(patient)
+    } catch (error) {
+        return res.status(500).json({message: error.message})
+    }
+}
