@@ -16,7 +16,7 @@ export default function Sidebar() {
     { to: "/profile", label: "Admin Profile", icon: <AiOutlineUser /> },
     { to: "/doctorlist", label: "Doctors List", icon: <FaUserMd /> },
     { to: "/dashboard", label: "Dashboard", icon: <AiFillDashboard /> },
-    { to: "/add-post", label: "Add Doctor", icon: <AiFillEdit /> },
+    { to: "/add-post", label: "Add Staff", icon: <AiFillEdit /> },
     { to: "/forms", label: "Patients Forms", icon: <AiOutlineForm /> },
     { to: "/tables", label: "Tables", icon: <AiOutlineTable /> },
   ];
@@ -24,7 +24,7 @@ export default function Sidebar() {
   return (
     <aside className="w-64 h-screen bg-white border-r hidden md:block">
       <div className="p-6">
-        <h2 className="text-center font-bold mb-6 text-gray-800 uppercase tracking-wide">
+        <h2 className="text-center text-xl font-bold mb-6 text-gray-800 uppercase tracking-wide">
          ADMIN PANEL
         </h2>
         <nav>

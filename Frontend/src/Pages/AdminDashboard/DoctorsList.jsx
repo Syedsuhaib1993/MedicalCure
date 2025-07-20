@@ -3,12 +3,28 @@ import Sidebar from "./Sidebar";
 import AdminNavbar from "./AdminNavbar";
 import axios from "axios";
 
-export default function DoctorsList({setToast}) {
-  const [imageuri,setImageuri] = useState("")
+export default function DoctorsList({ setToast }) {
+  const [imageuri, setImageuri] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [doctors, setDoctors] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [doctorToDelete, setDoctorToDelete] = useState(null);
+
+  const diseases = [
+  'Orthopedic Surgeon',
+  'Cardiologist',
+  'Pediatrician',
+  'Neurologist',
+  'Dermatologist',
+  'Ophthalmologist',
+  'Surgeon',
+  'Orthopedist',
+  'Urologist',
+  'Orthodontist',
+  'Anesthesiologist',
+
+  ];
 
   const [formData, setFormData] = useState({
     name: "",
@@ -17,7 +33,6 @@ export default function DoctorsList({setToast}) {
     specialty: "",
   });
 
-  // Fetch doctors
   const getDoctors = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/api/get`);
@@ -32,26 +47,35 @@ export default function DoctorsList({setToast}) {
     getDoctors();
   }, []);
 
-  // Form handlers
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Add Doctors
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageuri(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
   const addDoctor = async (e) => {
     e.preventDefault();
     try {
-      //  console.log(imageuri);
-       const imageURI = new FormData()
-       imageURI.append('image', imageuri)
-       const response = await axios.post('http://localhost:8080/api/image', imageURI)
-       const image = response.data.imageUrl
+      let image = "";
+      if (imageuri) {
+        const imageData = new FormData();
+        imageData.append("image", imageuri);
+        const res = await axios.post("http://localhost:8080/api/image", imageData);
+        image = res.data.imageUrl;
+      }
 
       const res = await axios.post("http://localhost:8080/api/staff", {
         ...formData,
         image,
         role: "Doctor",
       });
+
       setDoctors([...doctors, res.data.staff || res.data]);
       setFormData({
         name: "",
@@ -59,27 +83,23 @@ export default function DoctorsList({setToast}) {
         password: "",
         specialty: "",
       });
+      setImageuri(null);
+      setImagePreview(null);
       setIsModalOpen(false);
-      setToast({ message: "Doctor added Successfull", type: "success" })
-      setTimeout(() => {
-         setToast({ message: "", type: "" })
-      }, 2000);
+      setToast({ message: "Doctor added successfully!", type: "success" });
+      setTimeout(() => setToast({ message: "", type: "" }), 2000);
     } catch (error) {
       console.log(error.message);
-      setToast({ message: "Failed to add Doctor", type: "error" })
-      setTimeout(() => {
-         setToast({ message: "", type: "" })
-      }, 2000);
+      setToast({ message: "Failed to add Doctor", type: "error" });
+      setTimeout(() => setToast({ message: "", type: "" }), 2000);
     }
   };
 
-  // Open confirmation modal
   const confirmDeleteDoctor = (doctor) => {
     setDoctorToDelete(doctor);
     setIsDeleteModalOpen(true);
   };
 
-  // Delete Doctor
   const handleDeleteDoctor = async () => {
     if (!doctorToDelete) return;
 
@@ -88,18 +108,14 @@ export default function DoctorsList({setToast}) {
       setDoctors(doctors.filter((doc) => doc._id !== doctorToDelete._id));
       setIsDeleteModalOpen(false);
       setDoctorToDelete(null);
-      setToast({ message: "Doctor deleted successfully!", type: "success" })
-      setTimeout(() => {
-         setToast({ message: "", type: "" })
-      }, 2000);
-      
+      setToast({ message: "Doctor deleted successfully!", type: "success" });
+      setTimeout(() => setToast({ message: "", type: "" }), 2000);
     } catch (error) {
       console.log(error.message);
       alert("Failed to delete doctor.");
     }
   };
 
- 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <AdminNavbar />
@@ -116,7 +132,6 @@ export default function DoctorsList({setToast}) {
             </button>
           </div>
 
-          {/* Doctors Cards */}
           {doctors.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {doctors.map((doctor) => (
@@ -124,9 +139,17 @@ export default function DoctorsList({setToast}) {
                   key={doctor._id}
                   className="bg-white p-6 rounded-xl shadow-md flex flex-col items-center justify-center text-center transform hover:scale-105 transition-transform"
                 >
-                  <div className="w-24 h-24 rounded-full bg-indigo-100 flex items-center justify-center text-4xl text-indigo-600 font-bold mb-4">
-                    {doctor.name?.charAt(0)}
-                  </div>
+                  {doctor.image ? (
+                    <img
+                      src={doctor.image}
+                      alt={doctor.name}
+                      className="w-24 h-24 rounded-full object-cover mb-4 border-2 border-indigo-500"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 rounded-full bg-indigo-100 flex items-center justify-center text-4xl text-indigo-600 font-bold mb-4">
+                      {doctor.name?.charAt(0)}
+                    </div>
+                  )}
                   <h3 className="text-xl font-semibold mb-1">{doctor.name}</h3>
                   <p className="text-gray-600 mb-1">{doctor.specialty}</p>
                   <p className="text-gray-500 text-sm mb-4">{doctor.email}</p>
@@ -148,7 +171,6 @@ export default function DoctorsList({setToast}) {
             <p>No doctors found.</p>
           )}
 
-          {/* Add Doctor Modal */}
           {isModalOpen && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white rounded-lg p-8 max-w-lg w-full shadow-lg relative">
@@ -199,37 +221,76 @@ export default function DoctorsList({setToast}) {
                     />
                   </div>
 
-                  <div className="mb-6">
+                  <div className="mb-4">
                     <label className="block text-gray-700 mb-2 font-medium">
                       Specialty:
                     </label>
-                    <input
-                      type="text"
+                    <select
                       name="specialty"
                       value={formData.specialty}
                       onChange={handleChange}
                       required
                       className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      placeholder="e.g., Cardiologist"
-                    />
+                    >
+                      <option value="" disabled>
+                        Select a specialty
+                      </option>
+                      {diseases.map((spec, idx) => (
+                        <option key={idx} value={spec}>
+                          {spec}
+                        </option>
+                      ))}
+                    </select>
                   </div>
+
                   <div className="mb-6">
-                    <label className="block text-gray-700 mb-2 font-medium">
-                      image:
-                    </label>
-                    <input
-                      type="file"
-                      name="image"
-                      onChange={(e)=>setImageuri(e.target.files[0])}
-                      required
-                      className="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                  </div>
+  <label className="block text-gray-700 mb-2 font-medium">
+    Upload Image:
+  </label>
+  <label
+    className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-md p-6 text-center transition 
+    ${imagePreview ? 'border-green-400' : 'border-gray-400'} 
+    hover:border-indigo-500 cursor-pointer relative`}
+  >
+    <input
+      type="file"
+      name="image"
+      onChange={handleImageChange}
+      accept="image/*"
+      className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+    />
+    {!imagePreview ? (
+      <div className="flex flex-col items-center justify-center gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-12 w-12 text-gray-400 group-hover:text-indigo-500 transition"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 16l4-4 4 4m0-8l4 4 4-4" />
+        </svg>
+        <p className="text-gray-500">Click or drag to upload an image</p>
+      </div>
+    ) : (
+      <img
+        src={imagePreview}
+        alt="Preview"
+        className="mx-auto h-32 w-32 object-cover rounded-full shadow-md border border-indigo-400 transition-transform duration-300 transform hover:scale-105"
+      />
+    )}
+  </label>
+</div>
+
 
                   <div className="flex justify-end gap-3">
                     <button
                       type="button"
-                      onClick={() => setIsModalOpen(false)}
+                      onClick={() => {
+                        setIsModalOpen(false);
+                        setImagePreview(null);
+                        setImageuri(null);
+                      }}
                       className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
                     >
                       Cancel
@@ -246,7 +307,6 @@ export default function DoctorsList({setToast}) {
             </div>
           )}
 
-          {/* Delete Confirmation Modal */}
           {isDeleteModalOpen && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="bg-white rounded-lg p-8 max-w-sm w-full shadow-lg text-center">

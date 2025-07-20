@@ -16,7 +16,7 @@ export default function DoctorsLogin({setToast}) {
 
   const handleSubmit =async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    // console.log("Form submitted:", formData);
     // You can add your login logic here (e.g., API call)
     try {
           const response = await axios.post("http://localhost:8080/api/login",{
@@ -24,8 +24,9 @@ export default function DoctorsLogin({setToast}) {
             password: formData.password,
             doctor:formData.doctorName
           })
-          console.log(response.data.staff.role);
+          console.log(response.data.staff);
           localStorage.setItem('user',response.data.staff.role)
+          localStorage.setItem('doctor',response.data.staff.name)
           if(response.data.staff.role === "Doctor"){
             setToast({ message: "Login Successfull", type: "success" })
           setTimeout(() => {
@@ -77,6 +78,9 @@ export default function DoctorsLogin({setToast}) {
             <option value="Dr. Victor Nguyen">Dr. Victor Nguyen</option>
             <option value="Dr. Ethan Carter">Dr. Ethan Carter</option>
             <option value="Dr. Olivia Martinez">Dr. Olivia Martinez</option>
+            <option value="Dr. Kevin Peterson">Dr. Kevin Peterson</option>
+            <option value="Dr. Ricky Pointing">Dr. Ricky Pointing</option>
+            <option value="Dr. Crist Gayle">Dr. Crist Gayle</option>
           </select>
         </div>
 
@@ -120,7 +124,7 @@ export default function DoctorsLogin({setToast}) {
 
         <button
           type="submit"
-          className="w-full bg-teal-500 text-white font-semibold py-3 rounded-md hover:bg-teal-600 transition-colors"
+          className="w-full bg-backgroundColor text-white font-semibold py-3 rounded-md hover:bg-teal-600 transition-colors"
         >
           Login
         </button>

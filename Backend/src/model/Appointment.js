@@ -7,7 +7,11 @@ const patientSchema = new Schema({
     number:String,
     disease:String,
     doctor:String,
-    specialty:String
+    specialty:String,
+    status:{
+        type:String,
+        default:"Pending"
+    }
 })
 
 const Patient = model('Patients', patientSchema);

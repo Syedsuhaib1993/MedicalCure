@@ -34,6 +34,21 @@ const data = [
     name: 'Dr. Olivia Martinez',
     specialties: 'Ophthalmologist',
   },
+  {
+    img: 'doc7',
+    name: 'Dr. Kevin Peterson',
+    specialties: 'Surgeon',
+  },
+  {
+    img: 'doc8',
+    name: 'Dr. Ricky Pointing',
+    specialties: 'Orthopedist',
+  },
+  {
+    img: 'doc9',
+    name: 'Dr. Crist Gayle',
+    specialties: 'Urologist',
+  },
 ];
 
 // Example diseases list

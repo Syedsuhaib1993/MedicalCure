@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 
 export const createStaff = async(req,res)=>{
     try {
-        const {name, email, password,  specialty} = req.body;
+        const {name, email, password,  specialty, image} = req.body;
         if(!name || !email || !password  || !specialty){
             return res.status(400).json({message: "Please fill in all fields"});
         }
@@ -14,7 +14,7 @@ export const createStaff = async(req,res)=>{
             return res.status(400).json({message: 'Email already exist'});
         }
         const staff = new Staff({
-            name, email, password: hashedPassword, specialty
+            name, email, password: hashedPassword, specialty,image
             });
             await staff.save();
             res.json({message: 'Doctor added successfully',
@@ -74,7 +74,7 @@ export const deleteStaff = async(req,res)=>{
 
 export const loginStaff = async(req,res)=>{
     try {
-        const {email, password} = req.body;
+        const {email, password , } = req.body;
         if(!email || !password){
             return res.status(400).json({message: 'Please enter both email and password'});
         }
