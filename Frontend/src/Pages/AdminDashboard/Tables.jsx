@@ -56,7 +56,7 @@ export default function Tables() {
           {/* PATIENTS TABLE */}
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white rounded-lg shadow">
-              <thead className="bg-indigo-600 text-white">
+              <thead className="bg-backgroundColor text-white">
                 <tr>
                   <th className="py-3 px-4 text-left">Name</th>
                   <th className="py-3 px-4 text-left">Email</th>

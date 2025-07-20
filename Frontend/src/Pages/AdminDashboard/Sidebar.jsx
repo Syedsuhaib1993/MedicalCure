@@ -37,14 +37,14 @@ export default function Sidebar() {
                     to={link.to}
                     className={`flex items-center gap-3 px-4 py-3 rounded-md transition-all ${
                       isActive
-                        ? "bg-blue-100 text-blue-700 font-medium"
+                        ? "bg-blue-100 text-backgroundColor font-medium"
                         : "text-gray-700 hover:bg-gray-100"
                     }`}
                   >
                     <span className="text-xl">{link.icon}</span>
                     <span>{link.label}</span>
                     {isActive && (
-                      <span className="ml-auto h-2 w-2 rounded-full bg-blue-500"></span>
+                      <span className="ml-auto h-2 w-2 rounded-full bg-backgroundColor"></span>
                     )}
                   </Link>
                 </li>
