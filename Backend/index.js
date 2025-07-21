@@ -7,10 +7,12 @@ import StaffRoutes from './src/routes/staff.routes.js';
 import ImageRouter from './src/routes/image.routes.js';
 
 const app =express()
-dotenv.config()
 const port = process.env.PORT
+
 app.use(express.json())
 app.use(cors())
+
+dotenv.config()
 ConnectDB()
 
 // PATIENTROUTES
