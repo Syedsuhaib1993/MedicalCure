@@ -18,9 +18,9 @@ import Forms from "./Pages/AdminDashboard/Forms";
 import Tables from "./Pages/AdminDashboard/Tables";
 import Profile from "./Pages/AdminDashboard/Profile";
 import DoctorDashboard from "./Pages/DoctorDashboard/DoctorDashboard";
-import AdminRoutes from "./routes/adminRoutes";
 import DoctorRoutes from "./routes/DoctorRoutes";
 import DoctorsList from "./Pages/AdminDashboard/DoctorsList";
+import AdminRoutes from "./routes/AdminRoutes"
 const App = () => {
   const [toast, setToast] = useState({ message: "", type: "" });
   return (
