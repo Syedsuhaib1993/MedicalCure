@@ -18,7 +18,7 @@ export default function AdminLogin({setToast}) {
     console.log("Admin login data:", formData);
     // Add your admin login logic here (API call, validation, etc.)
     try {
-      const response = await axios.post("http://localhost:8080/api/login",{
+      const response = await axios.post(`${import.meta.env.VITE_URI  || "http://localhost:8080"}/api/login`,{
         email: formData.email,
         password: formData.password,
       })

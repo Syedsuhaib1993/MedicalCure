@@ -9,7 +9,8 @@ export default function Tables() {
   useEffect(() => {
     const getPatients = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/getPatient");
+        const response = await axios.get(
+          `${import.meta.env.VITE_URI  || "http://localhost:8080"}/api/getPatient`);
         setPatients(response.data);
       } catch (error) {
         console.error(error.message);

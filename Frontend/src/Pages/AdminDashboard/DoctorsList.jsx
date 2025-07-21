@@ -12,18 +12,17 @@ export default function DoctorsList({ setToast }) {
   const [doctorToDelete, setDoctorToDelete] = useState(null);
 
   const diseases = [
-  'Orthopedic Surgeon',
-  'Cardiologist',
-  'Pediatrician',
-  'Neurologist',
-  'Dermatologist',
-  'Ophthalmologist',
-  'Surgeon',
-  'Orthopedist',
-  'Urologist',
-  'Orthodontist',
-  'Anesthesiologist',
-
+    "Orthopedic Surgeon",
+    "Cardiologist",
+    "Pediatrician",
+    "Neurologist",
+    "Dermatologist",
+    "Ophthalmologist",
+    "Surgeon",
+    "Orthopedist",
+    "Urologist",
+    "Orthodontist",
+    "Anesthesiologist",
   ];
 
   const [formData, setFormData] = useState({
@@ -35,7 +34,9 @@ export default function DoctorsList({ setToast }) {
 
   const getDoctors = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/get`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_URI || "http://localhost:8080"}/api/get`
+      );
       const doctorList = response.data.filter((user) => user.role === "Doctor");
       setDoctors(doctorList);
     } catch (error) {
@@ -66,15 +67,21 @@ export default function DoctorsList({ setToast }) {
       if (imageuri) {
         const imageData = new FormData();
         imageData.append("image", imageuri);
-        const res = await axios.post("http://localhost:8080/api/image", imageData);
+        const res = await axios.post(
+          `${import.meta.env.VITE_URI || "http://localhost:8080"}/api/image`,
+          imageData
+        );
         image = res.data.imageUrl;
       }
 
-      const res = await axios.post("http://localhost:8080/api/staff", {
-        ...formData,
-        image,
-        role: "Doctor",
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_URI || "http://localhost:8080"}/api/staff`,
+        {
+          ...formData,
+          image,
+          role: "Doctor",
+        }
+      );
 
       setDoctors([...doctors, res.data.staff || res.data]);
       setFormData({
@@ -104,7 +111,11 @@ export default function DoctorsList({ setToast }) {
     if (!doctorToDelete) return;
 
     try {
-      await axios.delete(`http://localhost:8080/api/${doctorToDelete._id}`);
+      await axios.delete(
+        `${import.meta.env.VITE_URI || "http://localhost:8080"}/api/${
+          doctorToDelete._id
+        }`
+      );
       setDoctors(doctors.filter((doc) => doc._id !== doctorToDelete._id));
       setIsDeleteModalOpen(false);
       setDoctorToDelete(null);
@@ -244,44 +255,50 @@ export default function DoctorsList({ setToast }) {
                   </div>
 
                   <div className="mb-6">
-  <label className="block text-gray-700 mb-2 font-medium">
-    Upload Image:
-  </label>
-  <label
-    className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-md p-6 text-center transition 
-    ${imagePreview ? 'border-green-400' : 'border-gray-400'} 
+                    <label className="block text-gray-700 mb-2 font-medium">
+                      Upload Image:
+                    </label>
+                    <label
+                      className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-md p-6 text-center transition 
+    ${imagePreview ? "border-green-400" : "border-gray-400"} 
     hover:border-indigo-500 cursor-pointer relative`}
-  >
-    <input
-      type="file"
-      name="image"
-      onChange={handleImageChange}
-      accept="image/*"
-      className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
-    />
-    {!imagePreview ? (
-      <div className="flex flex-col items-center justify-center gap-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-12 w-12 text-gray-400 group-hover:text-indigo-500 transition"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 16l4-4 4 4m0-8l4 4 4-4" />
-        </svg>
-        <p className="text-gray-500">Click or drag to upload an image</p>
-      </div>
-    ) : (
-      <img
-        src={imagePreview}
-        alt="Preview"
-        className="mx-auto h-32 w-32 object-cover rounded-full shadow-md border border-indigo-400 transition-transform duration-300 transform hover:scale-105"
-      />
-    )}
-  </label>
-</div>
-
+                    >
+                      <input
+                        type="file"
+                        name="image"
+                        onChange={handleImageChange}
+                        accept="image/*"
+                        className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
+                      />
+                      {!imagePreview ? (
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-12 w-12 text-gray-400 group-hover:text-indigo-500 transition"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M3 16l4-4 4 4m0-8l4 4 4-4"
+                            />
+                          </svg>
+                          <p className="text-gray-500">
+                            Click or drag to upload an image
+                          </p>
+                        </div>
+                      ) : (
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          className="mx-auto h-32 w-32 object-cover rounded-full shadow-md border border-indigo-400 transition-transform duration-300 transform hover:scale-105"
+                        />
+                      )}
+                    </label>
+                  </div>
 
                   <div className="flex justify-end gap-3">
                     <button

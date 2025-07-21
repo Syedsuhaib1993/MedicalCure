@@ -12,7 +12,7 @@ export default function Profile() {
     const getAdmin = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/687cb0b910e50ce416ca24ad`
+          `${import.meta.env.VITE_URI  || "http://localhost:8080"}/api/${import.meta.env.ADMIN_ID}`
         );
         setAdmin(response.data);
       } catch (error) {

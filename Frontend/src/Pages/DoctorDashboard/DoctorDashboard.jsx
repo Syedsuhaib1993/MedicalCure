@@ -15,7 +15,7 @@ export default function DoctorDashboard() {
     const getPatients = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/getPatient"
+          `${import.meta.env.VITE_URI  || "http://localhost:8080"}/api/getPatient`
         );
         setPatients(response.data);
       } catch (error) {
@@ -46,7 +46,7 @@ export default function DoctorDashboard() {
   // ✅ Handle status update
   const handleStatusUpdate = async (id) => {
     try {
-      await axios.patch(`http://localhost:8080/api/${id}`, {
+      await axios.patch(`${import.meta.env.VITE_URI  || "http://localhost:8080"}/api/${id}`, {
         status: "Confirmed",
       });
 

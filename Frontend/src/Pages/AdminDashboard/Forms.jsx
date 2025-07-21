@@ -14,7 +14,7 @@ export default function Forms() {
     const getPatient = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/getPatient"
+          `${import.meta.env.VITE_URI || "http://localhost:8080"}/api/getPatient`
         );
         setPatients(response.data);
       } catch (error) {

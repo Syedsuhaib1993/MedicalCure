@@ -86,7 +86,7 @@ const Contact = ({ closeForm ,setToast}) => {
     e.preventDefault()
     // console.log(name,email,number,selectedDisease,selectedDoctor,selectedSpecialty);
     try {
-      const response = await axios.post('http://localhost:8080/api/create',{
+      const response = await axios.post(`${import.meta.env.VITE_URI || "http://localhost:8080"}/api/create`,{
         name:name,
         email:email,
         number:number,

@@ -19,7 +19,7 @@ export default function DoctorsLogin({setToast}) {
     // console.log("Form submitted:", formData);
     // You can add your login logic here (e.g., API call)
     try {
-          const response = await axios.post("http://localhost:8080/api/login",{
+          const response = await axios.post(`${import.meta.env.VITE_URI  || "http://localhost:8080"}/api/login`,{
             email: formData.email,
             password: formData.password,
             doctor:formData.doctorName
