@@ -11,6 +11,7 @@ const port = process.env.PORT
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://medical-cure.vercel.app"
 ];
 
 const corsOptions = {
