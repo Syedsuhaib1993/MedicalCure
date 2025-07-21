@@ -250,7 +250,7 @@ export default function DoctorsList({ setToast }) {
               ))}
             </div>
           ) : (
-            <p>No doctors found.</p>
+            <p>No doctors found..</p>
           )}
 
           {isEditModalOpen && (
