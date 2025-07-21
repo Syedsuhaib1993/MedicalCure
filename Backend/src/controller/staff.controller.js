@@ -49,9 +49,9 @@ export const getStaffById = async(req,res)=>{
 export const updateStaff = async(req,res)=>{
     try {
         const id = req.params.id;
-        const {name, email, specialty} = req.body;
+        const {name, email, specialty,image} = req.body;
         const staff = await Staff.findByIdAndUpdate(id,{
-            name, email, specialty
+            name, email, specialty,image
         },{new: true});
         return res.status(200).json({
             message: 'Doctor updated successfully',

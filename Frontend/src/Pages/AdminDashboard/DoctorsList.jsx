@@ -8,10 +8,10 @@ export default function DoctorsList({ setToast }) {
   const [imagePreview, setImagePreview] = useState(null);
   const [doctors, setDoctors] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // <-- NEW
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [doctorToEdit, setDoctorToEdit] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [doctorToDelete, setDoctorToDelete] = useState(null);
-  const [doctorToEdit, setDoctorToEdit] = useState(null); // <-- NEW
 
   const diseases = [
     "Orthopedic Surgeon",
@@ -86,12 +86,7 @@ export default function DoctorsList({ setToast }) {
       );
 
       setDoctors([...doctors, res.data.staff || res.data]);
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        specialty: "",
-      });
+      setFormData({ name: "", email: "", password: "", specialty: "" });
       setImageuri(null);
       setImagePreview(null);
       setIsModalOpen(false);
@@ -114,9 +109,7 @@ export default function DoctorsList({ setToast }) {
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_URI || "http://localhost:8080"}/api/${
-          doctorToDelete._id
-        }`
+        `${import.meta.env.VITE_URI || "http://localhost:8080"}/api/${doctorToDelete._id}`
       );
       setDoctors(doctors.filter((doc) => doc._id !== doctorToDelete._id));
       setIsDeleteModalOpen(false);
@@ -129,13 +122,12 @@ export default function DoctorsList({ setToast }) {
     }
   };
 
-  // NEW: OPEN EDIT MODAL
   const handleEditDoctor = (doctor) => {
     setDoctorToEdit(doctor);
     setFormData({
       name: doctor.name || "",
       email: doctor.email || "",
-      password: "", // leave blank for security
+      password: "",
       specialty: doctor.specialty || "",
     });
     setImagePreview(doctor.image || null);
@@ -143,9 +135,10 @@ export default function DoctorsList({ setToast }) {
     setIsEditModalOpen(true);
   };
 
-  // NEW: UPDATE DOCTOR API
   const updateDoctor = async (e) => {
     e.preventDefault();
+    if (!doctorToEdit) return;
+
     try {
       let image = doctorToEdit.image;
 
@@ -158,18 +151,18 @@ export default function DoctorsList({ setToast }) {
         );
         image = res.data.imageUrl;
       }
+      console.log(image);
+      
 
       const res = await axios.put(
-        `${import.meta.env.VITE_URI || "http://localhost:8080"}/api/${
-          doctorToEdit._id
-        }`,
+        `${import.meta.env.VITE_URI || "http://localhost:8080"}/api/${doctorToEdit._id}`,
         {
           ...formData,
-          image,
+          image:image,
         }
       );
-
-      // Update in state
+      console.log(res.data);
+      
       setDoctors(
         doctors.map((doc) =>
           doc._id === doctorToEdit._id ? res.data.staff || res.data : doc
@@ -178,12 +171,7 @@ export default function DoctorsList({ setToast }) {
 
       setIsEditModalOpen(false);
       setDoctorToEdit(null);
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        specialty: "",
-      });
+      setFormData({ name: "", email: "", password: "", specialty: "" });
       setImageuri(null);
       setImagePreview(null);
       setToast({ message: "Doctor updated successfully!", type: "success" });
@@ -250,47 +238,190 @@ export default function DoctorsList({ setToast }) {
               ))}
             </div>
           ) : (
-            <p>No doctors found..</p>
+            <p>No doctors found.</p>
           )}
 
+          {/* Add Modal */}
+          {isModalOpen && (
+            <DoctorFormModal
+              title="Add New Doctor"
+              formData={formData}
+              handleChange={handleChange}
+              handleImageChange={handleImageChange}
+              handleSubmit={addDoctor}
+              handleCancel={() => {
+                setIsModalOpen(false);
+                setFormData({ name: "", email: "", password: "", specialty: "" });
+                setImageuri(null);
+                setImagePreview(null);
+              }}
+              imagePreview={imagePreview}
+              diseases={diseases}
+              submitLabel="Add Doctor"
+            />
+          )}
+
+          {/* Edit Modal */}
           {isEditModalOpen && (
+            <DoctorFormModal
+              title="Edit Doctor"
+              formData={formData}
+              handleChange={handleChange}
+              handleImageChange={handleImageChange}
+              handleSubmit={updateDoctor}
+              handleCancel={() => {
+                setIsEditModalOpen(false);
+                setDoctorToEdit(null);
+                setFormData({ name: "", email: "", password: "", specialty: "" });
+                setImageuri(null);
+                setImagePreview(null);
+              }}
+              imagePreview={imagePreview}
+              diseases={diseases}
+              submitLabel="Update Doctor"
+            />
+          )}
+
+          {/* Delete Modal */}
+          {isDeleteModalOpen && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white rounded-lg p-8 max-w-lg w-full shadow-lg relative">
-                <h3 className="text-xl font-bold mb-4">Edit Doctor</h3>
-                <form onSubmit={updateDoctor}>
-                  {/* SAME FORM FIELDS as ADD */}
-                  {/* ... reuse inputs same as addDoctor ... */}
-                  {/* Here for brevity you can copy the addDoctor modal form markup,
-                      just change the submit button and cancel logic as shown below. */}
-                  {/* Cancel and Update */}
-                  <div className="flex justify-end gap-3 mt-4">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsEditModalOpen(false);
-                        setDoctorToEdit(null);
-                        setImagePreview(null);
-                        setImageuri(null);
-                      }}
-                      className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition"
-                    >
-                      Update Doctor
-                    </button>
-                  </div>
-                </form>
+              <div className="bg-white rounded-lg p-8 max-w-sm w-full shadow-lg text-center">
+                <h3 className="text-xl font-bold mb-4">Confirm Delete</h3>
+                <p className="mb-6">
+                  Are you sure you want to delete{" "}
+                  <span className="font-semibold">{doctorToDelete?.name}</span>?
+                </p>
+                <div className="flex justify-center gap-4">
+                  <button
+                    onClick={() => setIsDeleteModalOpen(false)}
+                    className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleDeleteDoctor}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           )}
-
-          {/* Rest of your Add and Delete modals stay same */}
         </section>
       </main>
+    </div>
+  );
+}
+
+// ✅ Extracted reusable modal (put this in same file or separate file)
+function DoctorFormModal({
+  title,
+  formData,
+  handleChange,
+  handleImageChange,
+  handleSubmit,
+  handleCancel,
+  imagePreview,
+  diseases,
+  submitLabel,
+}) {
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white rounded-lg p-8 max-w-lg w-full shadow-lg relative">
+        <h3 className="text-xl font-bold mb-4">{title}</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2 font-medium">Name:</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md p-3"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2 font-medium">Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md p-3"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2 font-medium">Password:</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-md p-3"
+              placeholder="••••••••"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2 font-medium">Specialty:</label>
+            <select
+              name="specialty"
+              value={formData.specialty}
+              onChange={handleChange}
+              required
+              className="w-full border border-gray-300 rounded-md p-3"
+            >
+              <option value="" disabled>
+                Select a specialty
+              </option>
+              {diseases.map((spec, idx) => (
+                <option key={idx} value={spec}>
+                  {spec}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-6">
+            <label className="block text-gray-700 mb-2 font-medium">
+              Upload Image:
+            </label>
+            <label className="w-full flex flex-col items-center justify-center border-2 border-dashed rounded-md p-6 text-center cursor-pointer relative">
+              <input
+                type="file"
+                onChange={handleImageChange}
+                accept="image/*"
+                className="opacity-0 absolute inset-0 w-full h-full"
+              />
+              {imagePreview ? (
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="mx-auto h-32 w-32 object-cover rounded-full shadow-md"
+                />
+              ) : (
+                <p>Click or drag to upload an image</p>
+              )}
+            </label>
+          </div>
+          <div className="flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition"
+            >
+              {submitLabel}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
