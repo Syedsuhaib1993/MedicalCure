@@ -9,7 +9,16 @@ import ImageRouter from './src/routes/image.routes.js';
 const app =express()
 const port = process.env.PORT
 
-app.use(express.json())
+const allowedOrigins = [
+  "http://localhost:5173",
+];
+
+const corsOptions = {
+  origin: allowedOrigins, // your frontend domain!
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+};
+
+app.use(express.json(corsOptions))
 app.use(cors())
 
 dotenv.config()
